@@ -1,18 +1,20 @@
 const http = require('http')
+const fs = require('fs')
 
 let server = http.createServer( function(request, respon) {
     if (request.url == "/") {
         respon.writeHead(200, {'Content-type': 'text/html'})
         respon.write('<h1>Halaman Beranda</h1>')
+        respon.end()
     } else if (request.url == "/profil") {
-        respon.writeHead(200, {'Content-type': 'text/html'})
-        respon.write('<h1>Halaman Profil</h1>')
+        fs.createReadStream("./view/profil.html").pipe(respon)
+    } else if (request.url == "/berita") {
+        fs.createReadStream("./view/berita.html").pipe(respon)
     } else {
         respon.writeHead(200, {'Content-type': 'text/html'})
         respon.write('<h1>404 Not Found</h1>')
+        respon.end()
     }
-    respon.writeHead(200, {'Content-type': 'text/plain'})
-    respon.end(html)
 })
 
 server.listen(3000, function() {
