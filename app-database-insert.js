@@ -12,20 +12,19 @@ const db = mysql.createConnection({
 //Menyambungkan atau membuka koneksi
 db.connect()
 
-//Ambil data dari mysql (using SQL queries)
-db.query("SELECT * FROM karyawan", function(error, hasil){
+let sql =
+`INSERT INTO
+karyawan (nama, gender, alamat, nip)
+VALUES ('Jokowi', 'L', 'Solo', '007')`
+//Insert data ke mysql (using SQL queries)
+db.query(sql, function(error, hasil){
     if (error) {
         console.log(error);
     } else {
-        console.log(hasil)
-        console.log("========")
-        console.log(hasil[1].nama)
-        console.log("========")
-        for (let i = 0; i < hasil.length; i++) {
-            console.log(hasil[i].nama)
-            
+        // console.log(hasil)
+        if (hasil.affectedRows > 0) {
+            console.log('Berhasil insert data karyawan')
         }
-
     }
 })
 
