@@ -1,0 +1,36 @@
+<h1>Profil Developer</h1>
+<hr>
+Nama: Au Et<br>
+Alamat: Tangerang<br>
+Role: <%= jabatan %><br>
+Kelamin: <%= gender %><br>
+Gaji: <%= gaji.toLocaleString('id-ID') %><br>
+
+<!-- Cara menulis logic backend di EJS -->
+
+<!-- Coach prefers this way bcs you can add more html coding such as <span></span> on the words -->
+ <!-- Buka tutup tag setiap baris sampai logic selesai -->
+<!-- HTML bisa auto ketik karena free dan tampil sesuai blok logic -->
+<% let umr = 500000 %>
+<% if (gaji > umr) { %>
+    Status: Kena pajak
+    <% } else { %>
+    Status: Tidak kena pajak
+<% } %>
+<br>
+
+<!-- OR -->
+
+<!-- Buku tutup tag hanya sekali -->
+<!-- HTML tidak bisa auto ketik karena html dieksekusi dalam function append sebagai string -->
+<% 
+if (gaji > umr) {
+    __append('Status: Kena pajak<br>')
+} else {
+    __append('Status: Tidak kena pajak<br>')
+}
+%>
+
+<a href="'/hubungi">
+    <button>Tertarik? Silakan hubungi</button>
+</a>
