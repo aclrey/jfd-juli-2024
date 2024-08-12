@@ -1,6 +1,13 @@
 const express = require('express')
 const app = express()
 const port = 3000
+const mysql = require('mysql2')
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'jfd_belajar'
+})
 
 //In the homepage (url: /), run a function with 2 parameters, req and res
 app.get('/', (req, res) => {
@@ -47,6 +54,27 @@ app.get('/profil', (req, res) => {
     //     gdr: gender
     // })
     res.render('profil-developer.ejs', data)
+})
+
+//Proses pengambilan data dari mySql
+function get_semuaKaryawan() {
+    return new Promise( (resolve, reject) => {
+        db.query("SELECT * FROM karyawan", function(errorSql, hasil) {
+            if (errorSql) {
+                reject(errorSql)
+            } else {
+                resolve(hasil)
+            }
+        })
+    })
+}
+
+//Gunakan asynx & await untuk memaksa nodejs menunggu script yang dipanggil sampai selesai dieksekusi
+app.get('/karyawan', async function(req, res) {
+    let dataView = {
+        karyawan: await get_semuaKaryawan()
+    }
+    res.render('karyawan/index', dataView)
 })
 
 //Turn on the server by listening to the port
