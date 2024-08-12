@@ -1,4 +1,10 @@
-<h1>Data Seluruh Karyawan PT Konoha Makmur</h1><br>
+<style>
+    .td {
+        padding: 10px;
+
+    }
+</style>
+<h1>Data Seluruh Karyawan PT Konoha Makmur</h1>
 <hr>
 <table border="1">
     <thead>
@@ -11,9 +17,14 @@
     <tbody>
         <% for (let i = 0; i < karyawan.length; i++) { %>
             <tr>
-                <td><%= karyawan[i].nama %></td>
-                <td><%= karyawan[i].gender %></td>
-                <td><%= karyawan[i].nip %></td>
+                <td class="td"><%= karyawan[i].nama %></td>
+                <td class="td"><%= karyawan[i].gender %></td>
+                <td class="td"><%= karyawan[i].nip %></td>
+                <td class="td">
+                    <a href="/karyawan/detail/<%= karyawan[i].id %>">
+                        <button>See Detail</button>
+                    </a>
+                </td>>
             </tr>>
         <% } %>
     </tbody>
