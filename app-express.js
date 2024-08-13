@@ -8,11 +8,17 @@ const db = mysql.createConnection({
     password: '',
     database: 'jfd_belajar'
 })
+db.connect()
 
 //In the homepage (url: /), run a function with 2 parameters, req and res
 app.get('/', (req, res) => {
     res.send('Hello World!')
 })
+
+//To retrieve data encoded/encrypted in the HTML form that is sent through the HTTP protocol
+//Wdym encypted? The HTTP protocol encrypts (protects) your data
+//Encryption is done to make sure the data reaches the designated backend, uninterrupted by external ppl
+app.use(express.urlencoded({extended:false}))
 
 //Set/tell Express to use the EJS templating engine 
 app.set('view engine', 'ejs')
@@ -148,6 +154,62 @@ app.get('/karyawan/hapus/:id_karyawan', async function (req, res) {
 app.get('/karyawan/tambah', function (req, res) {
     res.render('karyawan/form-tambah')
 })
+
+//To post the data retrieved from frontend
+app.post('/karyawan/proses-insert', async function(req,res) {
+    let body = req.body
+
+    try {
+        let insert = await insert_karyawan(req)
+        if (insert.affectedRows > 0) {
+            res.redirect('/karyawan')
+        }
+    }
+    catch (error) {
+        throw error
+    }
+})
+
+//WORKS BUT NOT IDEAL
+// function insert_karyawan(body) {
+//     let sql =
+//         `INSERT INTO karyawan
+//         (nama, gender, alamat, nip)
+//         VALUES
+//         ('${body.form_namaLengkap}', '${body.form_gender}', '${body.form_alamat}', '${body.form_nip}')`
+
+//         return new Promise((resolve, reject) => {
+//         db.query(sql, [], function (errorSql, hasil) {
+//             if (errorSql) {
+//                 reject(errorSql)
+//             } else {
+//                 resolve(hasil)
+//             }
+//         })
+//     })
+// }
+
+//Safer way
+function insert_karyawan(req) {
+    let data = {
+        nama    : req.body.form_namaLengkap,
+        gender  : req.body.form_gender,
+        alamat  : req.body.form_alamat,
+        nip     : req.body.form_nip,
+    }
+
+    let sql = `INSERT INTO karyawan SET ?`
+
+        return new Promise((resolve, reject) => {
+        db.query(sql, [data], function (errorSql, hasil) {
+            if (errorSql) {
+                reject(errorSql)
+            } else {
+                resolve(hasil)
+            }
+        })
+    })
+}
 
 //Turn on the server by listening to the port
 app.listen(port, () => {
