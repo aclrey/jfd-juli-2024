@@ -90,8 +90,19 @@ app.get('/karyawan/detail/:id_karyawan', async function (req, res) {
 })
 
 function get_satuKaryawan(idk) {
+    let sql =
+`SELECT
+karyawan.*,
+departemen.kode AS kodeDept,
+departemen.nama AS namaDept,
+agama.nama as namaAgama
+FROM karyawan
+LEFT JOIN departemen ON departemen.id = karyawan.departemen_id
+LEFT JOIN agama ON agama.id = karyawan.agama_id
+where karyawan.id = ?`
+
     return new Promise( (resolve, reject) => {
-        db.query("SELECT * FROM karyawan where ID = ?", [idk], function(errorSql, hasil) {
+        db.query(sql, [idk], function(errorSql, hasil) {
             if (errorSql) {
                 reject(errorSql)
             } else {
