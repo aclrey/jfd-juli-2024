@@ -6,12 +6,18 @@
 </style>
 <h1>Data Seluruh Karyawan PT Konoha Makmur</h1>
 <hr>
+<a href="/karyawan/tambah">
+    <button class="td" style="background-color:blue; color:white;">Tambah</button>
+</a>
+<br>
+<br>
 <table border="1">
     <thead>
         <tr>
             <th>Nama</th>
             <th>Gender</th>
             <th>NIP</th>
+            <th colspan="2">Pilihan</th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +31,12 @@
                         <button>See Detail</button>
                     </a>
                 </td>>
+                <td>
+                    <a href="/karyawan/hapus/<%= karyawan[i].id %>"
+                    onclick="return confirm('Yakin ingin menghapus <%= karyawan[i].nama %>? Data yang dihapus akan hilang selamanya.')">
+                        <button style="background-color: red; color:white;">Delete</button>
+                    </a>
+                </td>
             </tr>>
         <% } %>
     </tbody>

@@ -58,8 +58,8 @@ app.get('/profil', (req, res) => {
 
 //Proses pengambilan data dari mySql
 function get_semuaKaryawan() {
-    return new Promise( (resolve, reject) => {
-        db.query("SELECT * FROM karyawan", function(errorSql, hasil) {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT * FROM karyawan", function (errorSql, hasil) {
             if (errorSql) {
                 reject(errorSql)
             } else {
@@ -70,7 +70,7 @@ function get_semuaKaryawan() {
 }
 
 //Gunakan asynx & await untuk memaksa nodejs menunggu script yang dipanggil sampai selesai dieksekusi
-app.get('/karyawan', async function(req, res) {
+app.get('/karyawan', async function (req, res) {
     let dataView = {
         karyawan: await get_semuaKaryawan()
     }
@@ -91,7 +91,7 @@ app.get('/karyawan/detail/:id_karyawan', async function (req, res) {
 
 function get_satuKaryawan(idk) {
     let sql =
-`SELECT
+        `SELECT
 karyawan.*,
 departemen.kode AS kodeDept,
 departemen.nama AS namaDept,
@@ -99,10 +99,10 @@ agama.nama as namaAgama
 FROM karyawan
 LEFT JOIN departemen ON departemen.id = karyawan.departemen_id
 LEFT JOIN agama ON agama.id = karyawan.agama_id
-where karyawan.id = ?`
+where karyawan.id = ?`;
 
-    return new Promise( (resolve, reject) => {
-        db.query(sql, [idk], function(errorSql, hasil) {
+    return new Promise((resolve, reject) => {
+        db.query(sql, [idk], function (errorSql, hasil) {
             if (errorSql) {
                 reject(errorSql)
             } else {
@@ -111,6 +111,43 @@ where karyawan.id = ?`
         })
     })
 }
+
+function hapus_satuKaryawan(idk) {
+    let sql =
+        `DELETE FROM karyawan
+where karyawan.id = ?`;
+
+    return new Promise((resolve, reject) => {
+        db.query(sql, [idk], function (errorSql, hasil) {
+            if (errorSql) {
+                reject(errorSql)
+            } else {
+                resolve(hasil)
+            }
+        })
+    })
+}
+
+app.get('/karyawan/hapus/:id_karyawan', async function (req, res) {
+    //Ambil ID yang dikirim via URL
+    try {
+        let idk = req.params.id_karyawan;
+
+        //Proses hapus data
+        let hapus = await hapus_satuKaryawan(idk)
+
+        //Validation of successful delete
+        if (hapus.affectedRows > 0) {
+            res.redirect('/karyawan')
+        }
+    } catch (error) {
+        throw error
+    }
+})
+
+app.get('/karyawan/tambah', function (req, res) {
+    res.render('karyawan/form-tambah')
+})
 
 //Turn on the server by listening to the port
 app.listen(port, () => {

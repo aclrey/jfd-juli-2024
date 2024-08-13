@@ -7,6 +7,7 @@
     <b>Gender</b>: <%= (pegawai[0].gender =="m") ? "Laki-laki" : "Perempuan" %><br>
     <b>NIP</b>: <%= pegawai[0].nip %><br>
     <b>Alamat</b>: <%= pegawai[0].alamat %><br>
-    <b>Departemen</b>: <%= pegawai[0].kodeDept %><br> (<%= pegawai[0].namaDept %>)<br>
+    <b>Departemen</b>: <%= pegawai[0].kodeDept %> (<%= pegawai[0].namaDept %>)<br>
+    <b>Agama</b>: <%= pegawai[0].namaAgama %><br>
     <%= JSON.stringify(pegawai) %>
 <% } %>
