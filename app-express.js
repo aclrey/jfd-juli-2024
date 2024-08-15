@@ -151,9 +151,36 @@ app.get('/karyawan/hapus/:id_karyawan', async function (req, res) {
     }
 })
 
-app.get('/karyawan/tambah', function (req, res) {
-    res.render('karyawan/form-tambah')
+app.get('/karyawan/tambah', async function (req, res) {
+    let dataView = {
+        dept: await get_semuaDepartemen(),
+        agm: await get_semuaAgama(),
+    }
+    res.render('karyawan/form-tambah', dataView)
 })
+
+function get_semuaDepartemen() {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT * FROM departemen", function (errorSql, hasil) {
+            if (errorSql) {
+                reject(errorSql)
+            } else {
+                resolve(hasil)
+            }
+        })
+    })
+}
+function get_semuaAgama() {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT * FROM agama", function (errorSql, hasil) {
+            if (errorSql) {
+                reject(errorSql)
+            } else {
+                resolve(hasil)
+            }
+        })
+    })
+}
 
 //To post the data retrieved from frontend
 app.post('/karyawan/proses-insert', async function(req,res) {
