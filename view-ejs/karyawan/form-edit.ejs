@@ -1,0 +1,47 @@
+<h1>Input Karyawan Baru</h1>
+<hr>
+<!-- Using form post bcs ure posting the data from user -->
+<form action="/karyawan/proses-update/<%= pegawai[0].id %>" method="post">
+    <label>Nama Lengkap</label>
+    <input type="text" id="namaLengkap" name="form_namaLengkap" value="<%= pegawai[0].nama %>" required>
+    <br><br>
+
+    <label>Gender</label>
+    <br>
+    <input type="radio" id="gender_l" name="form_gender" value="L" <%= (pegawai[0].gender == "m") ? "checked" : "" %> required>
+    <label>Laki-laki</label>
+    <input type="radio" id="gender_p" name="form_gender" value="P" <%= (pegawai[0].gender == "f") ? "checked" : "" %> required>
+    <label>Perempuan</label>
+    <br><br>
+    
+    <label>Alamat</label>
+    <textarea id="alamat" name="form_alamat" required><%= pegawai[0].alamat %></textarea>
+    <br><br>
+
+    <label>NIP (Nomor Induk Pegawai)</label>
+    <input type="text" id="nip" name="form_nip" required value="<%= pegawai[0].nip %>">
+    <br><br>
+
+    <label>Departemen</label>
+    <select name="form_departemen" id="departemen" required>
+        <option selected value="<%= pegawai[0].departemen_id %>">-- Pilih --</option>
+        <% for (let i = 0; i < dept.length; i++) { %>
+            <option value="<%= dept[i].id %>" <%= (pegawai[0].departemen_id == dept[i].id) ? "selected" : "" %>> <%= dept[i].nama %> </option>
+        <% } %>
+    </select>
+    <br><br>
+    
+    <label>Agama</label>
+    <select name="form_agama" id="agama" required>
+        <option selected value="">-- Pilih --</option>
+        <% for (let i = 0; i < agm.length; i++) { %>
+            <option value="<%= agm[i].id %>" <%= (pegawai[0].agama_id == agm[i].id) ? "selected" : "" %>> <%= agm[i].nama %> </option>
+        <% } %>
+    </select>
+    <br><br>
+
+    <button type="submit">Submit</button>
+</form>
+<pre>
+    <%= JSON.stringify(pegawai) %>
+</pre>

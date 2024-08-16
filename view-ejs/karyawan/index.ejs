@@ -5,6 +5,10 @@
 </style>
 <h1>Data Seluruh Karyawan PT Konoha Makmur</h1>
 <hr>
+
+<% if (message) { %>
+    <div style="background-color:lightgreen; text-transform:capitalize;"><%= message %></div>
+<% } %>
 <a href="/karyawan/tambah">
     <button class="td" style="background-color:blue; color:white;">Tambah</button>
 </a>
@@ -16,7 +20,7 @@
             <th>Nama</th>
             <th>Gender</th>
             <th>NIP</th>
-            <th colspan="2">Pilihan</th>
+            <th colspan="3">Pilihan</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +32,11 @@
                 <td class="td">
                     <a href="/karyawan/detail/<%= karyawan[i].id %>">
                         <button>See Detail</button>
+                    </a>
+                </td>>
+                <td class="td">
+                    <a href="/karyawan/edit/<%= karyawan[i].id %>">
+                        <button style="background-color: rgb(255, 220, 117);">Edit</button>
                     </a>
                 </td>>
                 <td>
