@@ -1,41 +1,28 @@
-const db = require('../config/database')
+const mysql = require('mysql2')
+const db = require('../config/database').db
+const eksekusi = require('../config/database').eksekusi
 
 module.exports = {
 
     //Proses pengambilan data dari mySql
     get_semuaKaryawan: function () {
-        return new Promise((resolve, reject) => {
-            db.query("SELECT * FROM karyawan", function (errorSql, hasil) {
-                if (errorSql) {
-                    reject(errorSql)
-                } else {
-                    resolve(hasil)
-                }
-            })
-        })
+        return eksekusi(mysql.format("SELECT * FROM karyawan"))
+
     },
 
     get_satuKaryawan: function (idk) {
-        let sql =
+        return eksekusi(mysql.format(
             `SELECT
-karyawan.*,
-departemen.kode AS kodeDept,
-departemen.nama AS namaDept,
-agama.nama as namaAgama
-FROM karyawan
-LEFT JOIN departemen ON departemen.id = karyawan.departemen_id
-LEFT JOIN agama ON agama.id = karyawan.agama_id
-where karyawan.id = ?`;
+        karyawan.*,
+        departemen.kode AS kodeDept,
+        departemen.nama AS namaDept,
+        agama.nama AS namaAgama
+        FROM karyawan
+        LEFT JOIN departemen ON departemen.id = karyawan.departemen_id
+        LEFT JOIN agama ON agama.id = karyawan.agama_id
+        where karyawan.id = ?`,
+            [idk]))
 
-        return new Promise((resolve, reject) => {
-            db.query(sql, [idk], function (errorSql, hasil) {
-                if (errorSql) {
-                    reject(errorSql)
-                } else {
-                    resolve(hasil)
-                }
-            })
-        })
     },
 
     //WORKS BUT NOT IDEAL
@@ -68,33 +55,12 @@ where karyawan.id = ?`;
             agama_id: req.body.form_agama
         }
 
-        let sql = `INSERT INTO karyawan SET ?`
-
-        return new Promise((resolve, reject) => {
-            db.query(sql, [data], function (errorSql, hasil) {
-                if (errorSql) {
-                    reject(errorSql)
-                } else {
-                    resolve(hasil)
-                }
-            })
-        })
+        return eksekusi(sql.format(`INSERT INTO karyawan SET ?`), [data])
     },
 
     hapus_satuKaryawan: function (idk) {
-        let sql =
-            `DELETE FROM karyawan
-where karyawan.id = ?`;
-
-        return new Promise((resolve, reject) => {
-            db.query(sql, [idk], function (errorSql, hasil) {
-                if (errorSql) {
-                    reject(errorSql)
-                } else {
-                    resolve(hasil)
-                }
-            })
-        })
+        return eksekusi(sql.format(`DELETE FROM karyawan
+where karyawan.id = ?`, [idk]))
     },
 
     update_karyawan: function (req, idk) {
@@ -106,17 +72,20 @@ where karyawan.id = ?`;
             departemen_id: req.body.form_departemen,
             agama_id: req.body.form_agama
         }
-        // 'data' as the first array (according to order) is added to the first ? below. Then, 'idk'  is added to the second ?
-        let sql = `UPDATE karyawan SET ? WHERE id = ?`
 
-        return new Promise((resolve, reject) => {
-            db.query(sql, [data, idk], function (errorSql, hasil) {
-                if (errorSql) {
-                    reject(errorSql)
-                } else {
-                    resolve(hasil)
-                }
-            })
-        })
+        return eksekusi(sql.format(`UPDATE karyawan SET ? WHERE id = ?`), [data, idk])
+
+        // // 'data' as the first array (according to order) is added to the first ? below. Then, 'idk'  is added to the second ?
+        // let sql = `UPDATE karyawan SET ? WHERE id = ?`
+
+        // return new Promise((resolve, reject) => {
+        //     db.query(sql, [data, idk], function (errorSql, hasil) {
+        //         if (errorSql) {
+        //             reject(errorSql)
+        //         } else {
+        //             resolve(hasil)
+        //         }
+        //     })
+        // })
     }
 }

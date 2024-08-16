@@ -20,6 +20,7 @@ app.set('views', './view-ejs')
 const m_karyawan = require('./model/m_karyawan')
 const m_departemen = require('./model/m_departemen')
 const m_agama = require('./model/m_agama')
+const c_karyawan = require('./controller/c_karyawan')
 
 //Make access for another page URL
 // app.get('/hubungi', (req, res) => {
@@ -57,97 +58,15 @@ app.get('/profil', (req, res) => {
     res.render('profil-developer.ejs', data)
 })
 
-
-
 //Gunakan asynx & await untuk memaksa nodejs menunggu script yang dipanggil sampai selesai dieksekusi
-app.get('/karyawan', async function (req, res) {
-    //Ambil objek query string
-    let dataView = {
-        karyawan: await m_karyawan.get_semuaKaryawan,
-        message: req.query.msg
-    }
-    res.render('karyawan/index', dataView)
-})
-
-app.get('/karyawan/detail/:id_karyawan', async function (req, res) {
-    //Ambil ID yang dikirim via URL
-    //idk utk contain id, diubah jadi idk biar ga bingung
-    let idk = req.params.id_karyawan;
-
-    //Lalu dikirim ke proses data mysql
-    let dataView = {
-        pegawai: await m_karyawan.get_satuKaryawan
-    }
-    res.render('karyawan/detail', dataView)
-})
-
-
-app.get('/karyawan/hapus/:id_karyawan', async function (req, res) {
-    //Ambil ID yang dikirim via URL
-    try {
-        let idk = req.params.id_karyawan;
-
-        //Proses hapus data
-        let hapus = await m_karyawan.hapus_satuKaryawan
-
-        //Validation of successful delete
-        if (hapus.affectedRows > 0) {
-            res.redirect('/karyawan')
-        }
-    } catch (error) {
-        throw error
-    }
-})
-
-
-app.get('/karyawan/tambah', async function (req, res) {
-    let dataView = {
-        dept: await m_departemen.get_semuaDepartemen,
-        agm: await m_agama.get_semuaAgama,
-    }
-    res.render('karyawan/form-tambah', dataView)
-})
-
-
+app.get('/karyawan', c_karyawan.index)
+app.get('/karyawan/detail/:id_karyawan', c_karyawan.detail)
+app.get('/karyawan/hapus/:id_karyawan', c_karyawan.hapus)
+app.get('/karyawan/tambah', c_karyawan.tambah)
 //To post the data retrieved from frontend
-app.post('/karyawan/proses-insert', async function(req,res) {
-    let body = req.body
-
-    try {
-        let insert = await m_karyawan.insert_karyawan
-        if (insert.affectedRows > 0) {
-            res.redirect('/karyawan')
-        }
-    } catch (error) {
-        throw error
-    }
-})
-
-
-app.get('/karyawan/edit/:id_karyawan', async function (req, res) {
-    let idk = req.params.id_karyawan;
-
-    let dataView = {
-        pegawai: await m_karyawan.get_satuKaryawan,
-        dept: await m_departemen.get_semuaDepartemen,
-        agm: await m_agama.get_semuaAgama,
-    }
-    res.render('karyawan/form-edit', dataView)
-})
-
-app.post('/karyawan/proses-update/:id_karyawan', async function (req, res) {
-    let idk = req.params.id_karyawan;
-
-    try {
-        let update = await m_karyawan.update_karyawan
-        if (update.affectedRows > 0) {
-            res.redirect(`/karyawan?msg=berhasil edit karyawan a/n ${req.body.form_namaLengkap}`)
-        }
-    } catch (error) {
-        throw error
-    }
-})
-
+app.post('/karyawan/proses-insert', c_karyawan.proses_insert)
+app.get('/karyawan/edit/:id_karyawan', c_karyawan.edit)
+app.post('/karyawan/proses-update/:id_karyawan', c_karyawan.proses_update)
 
 //Turn on the server by listening to the port
 app.listen(port, () => {

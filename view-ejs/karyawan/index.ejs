@@ -33,19 +33,19 @@
                     <a href="/karyawan/detail/<%= karyawan[i].id %>">
                         <button>See Detail</button>
                     </a>
-                </td>>
+                </td>
                 <td class="td">
                     <a href="/karyawan/edit/<%= karyawan[i].id %>">
                         <button style="background-color: rgb(255, 220, 117);">Edit</button>
                     </a>
-                </td>>
+                </td>
                 <td>
                     <a href="/karyawan/hapus/<%= karyawan[i].id %>"
                     onclick="return confirm('Yakin ingin menghapus <%= karyawan[i].nama %>? Data yang dihapus akan hilang selamanya.')">
                         <button style="background-color: red; color:white;">Delete</button>
                     </a>
                 </td>
-            </tr>>
+            </tr>
         <% } %>
     </tbody>
 </table>
