@@ -1,3 +1,4 @@
+//Include masing" model
 const m_karyawan = require('../model/m_karyawan')
 const m_departemen = require('../model/m_departemen')
 const m_agama = require('../model/m_agama')

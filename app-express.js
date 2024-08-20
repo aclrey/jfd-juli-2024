@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
 })
 
 //To retrieve data encoded/encrypted in the HTML form that is sent through the HTTP protocol
-//Wdym encypted? The HTTP protocol encrypts (protects) your data
+//Wdym encrypted? The HTTP protocol encrypts (protects) your data
 //Encryption is done to make sure the data reaches the designated backend, uninterrupted by external ppl
 app.use(express.urlencoded({extended:false}))
 //Set/tell Express to use the EJS templating engine 
@@ -16,10 +16,7 @@ app.set('view engine', 'ejs')
 //Tell which folder will be used to save all .ejs files in
 app.set('views', './view-ejs')
 
-//Include masing" model
-const m_karyawan = require('./model/m_karyawan')
-const m_departemen = require('./model/m_departemen')
-const m_agama = require('./model/m_agama')
+//Include controller
 const c_karyawan = require('./controller/c_karyawan')
 
 //Make access for another page URL
